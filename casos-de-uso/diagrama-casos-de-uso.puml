@@ -1,0 +1,21 @@
+
+@startuml
+
+left to right direction
+
+actor Jogador as Usuario
+
+rectangle "Bolonha e Milano" {
+    usecase "Iniciar novo jogo" as UC1
+    usecase "Ver status da cidade" as UC2
+    usecase "Ver informacoes sobre o jogo" as UC3
+    usecase "Sair do jogo" as UC4
+}
+
+Usuario --> UC1
+Usuario --> UC2
+Usuario --> UC3
+Usuario --> UC4
+
+@enduml
+

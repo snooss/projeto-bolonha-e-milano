@@ -1,0 +1,44 @@
+
+@startuml
+
+class Main {
+    +main(args: String[]): int
+}
+
+class Menu {
+    -emExecucao: bool
+    -jogador: unique_ptr<Jogador>
+    -cidade: unique_ptr<Cidade>
+    +Menu()
+    +executar(): void
+    -iniciarNovoJogo(): void
+    -exibirOpcoes(): void
+    -lerOpcao(): int
+    -processarOpcao(opcao: int): void
+    -exibirSobre(): void
+    -exibirStatus(): void
+}
+
+class Jogador {
+    -nome: string
+    -titulo: string
+    +Jogador(nome: string)
+    +getNome(): string
+    +getTitulo(): string
+}
+
+class Cidade {
+    -nome: string
+    -anoAtual: int
+    -dono: Jogador*
+    +Cidade(nome: string, dono: Jogador*)
+    +avancarAno(): void
+    +exibirStatus(): void
+}
+
+Main ..> Menu : cria e executa
+Menu --> Jogador : gerencia
+Menu --> Cidade : gerencia
+Cidade --> "1" Jogador : dono
+
+@enduml
