@@ -11,6 +11,7 @@ Cidade::Cidade(const std::string& nome, Jogador* dono) {
     this->florins = 1000;
     this->terras = 10000;
     this->graos = 500;
+    this->servos = 200;
 }
 
 std::string Cidade::getNome() const {
@@ -35,6 +36,26 @@ int Cidade::getTerras() const {
 
 int Cidade::getGraos() const {
     return graos;
+}
+
+int Cidade::getServos() const {
+    return servos;
+}
+
+void Cidade::adicionarServos(int quantidade) {
+    if (quantidade > 0 &&
+        quantidade <= std::numeric_limits<int>::max() - servos) {
+        servos += quantidade;
+    }
+}
+
+bool Cidade::removerServos(int quantidade) {
+    if (quantidade <= 0 || quantidade > servos) {
+        return false;
+    }
+
+    servos -= quantidade;
+    return true;
 }
 
 void Cidade::avancarAno() {
@@ -100,5 +121,6 @@ void Cidade::exibirStatus() const {
     std::cout << "Florins: " << florins << '\n';
     std::cout << "Terras: " << terras << " hectares\n";
     std::cout << "Graos: " << graos << " unidades\n";
+    std::cout << "Servos: " << servos << '\n';
     std::cout << "======================================\n";
 }

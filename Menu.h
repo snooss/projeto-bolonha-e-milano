@@ -6,6 +6,7 @@
 #include "Jogador.h"
 #include "Cidade.h"
 #include "Mercado.h"
+#include "Agricultura.h"
 
 class Menu {
 private:
@@ -14,6 +15,7 @@ private:
     std::unique_ptr<Jogador> jogador;
     std::unique_ptr<Cidade> cidade;
     Mercado mercado;
+    Agricultura agricultura;
 
     void iniciarNovoJogo();
     void exibirOpcoes();
@@ -28,6 +30,9 @@ private:
     void venderGraos();
     void comprarTerras();
     void venderTerras();
+    void abrirAgricultura();
+    void colher();
+    void distribuirAlimentos();
 
 public:
     Menu();

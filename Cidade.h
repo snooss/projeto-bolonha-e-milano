@@ -14,6 +14,7 @@ private:
     int florins;
     int terras;
     int graos;
+    int servos;
 
 public:
     Cidade(const std::string& nome, Jogador* dono);
@@ -25,6 +26,7 @@ public:
     int getFlorins() const;
     int getTerras() const;
     int getGraos() const;
+    int getServos() const;
 
     void avancarAno();
 
@@ -38,6 +40,9 @@ public:
     bool removerGraos(int quantidade);
 
     void exibirStatus() const;
+
+    void adicionarServos(int quantidade);
+    bool removerServos(int quantidade);
 };
 
 #endif

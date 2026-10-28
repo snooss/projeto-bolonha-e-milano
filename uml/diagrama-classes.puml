@@ -38,6 +38,7 @@ class Cidade {
     -florins: int
     -terras: int
     -graos: int
+    -servos: int
     +getNome(): string
     +getAnoAtual(): int
     +getDono(): Jogador*
@@ -52,6 +53,9 @@ class Cidade {
     +adicionarGraos(qtd: int): void
     +removerGraos(qtd: int): bool
     +exibirStatus(): void
+    + getServos(): int
+    + adicionarServos(quantidade: int): void
+    + removerServos(quantidade: int): bool
 }
 
 class Mercado {
@@ -65,11 +69,24 @@ class Mercado {
     +venderTerras(cidade: Cidade, qtd: int): bool
 }
 
+class Agricultura {
+    - HECTARES_POR_SERVO: int
+    - RENDIMENTO_POR_HECTARE: int
+    - SERVOS_POR_GRAO: int
+    - CRESCIMENTO_PERCENTUAL: int
+    - PERCENTUAL_MINIMO: int
+    - PERCENTUAL_MAXIMO: int
+    + processarColheita(cidade: Cidade): int
+    + distribuirAlimentos(cidade: Cidade, percentual: int): bool
+}
+
 Main ..> Menu : cria
 Menu --> Jogador : gerencia
 Menu --> Cidade : gerencia
 Menu --> Mercado : utiliza
 Cidade --> Jogador : dono
 Mercado ..> Cidade : utiliza
+Menu --> Agricultura : utiliza
+Agricultura ..> Cidade : utiliza
 
 @enduml
