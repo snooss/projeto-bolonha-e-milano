@@ -9,20 +9,24 @@ class Menu {
     -emExecucao: bool
     -jogador: unique_ptr<Jogador>
     -cidade: unique_ptr<Cidade>
-    +Menu()
+    -mercado: Mercado
     +executar(): void
     -iniciarNovoJogo(): void
     -exibirOpcoes(): void
     -lerOpcao(): int
     -processarOpcao(opcao: int): void
-    -exibirSobre(): void
     -exibirStatus(): void
+    -abrirMercado(): void
+    -lerQuantidade(): int
+    -comprarGraos(): void
+    -venderGraos(): void
+    -comprarTerras(): void
+    -venderTerras(): void
 }
 
 class Jogador {
     -nome: string
     -titulo: string
-    +Jogador(nome: string)
     +getNome(): string
     +getTitulo(): string
 }
@@ -31,14 +35,41 @@ class Cidade {
     -nome: string
     -anoAtual: int
     -dono: Jogador*
-    +Cidade(nome: string, dono: Jogador*)
+    -florins: int
+    -terras: int
+    -graos: int
+    +getNome(): string
+    +getAnoAtual(): int
+    +getDono(): Jogador*
+    +getFlorins(): int
+    +getTerras(): int
+    +getGraos(): int
     +avancarAno(): void
+    +adicionarFlorins(qtd: int): void
+    +removerFlorins(qtd: int): bool
+    +adicionarTerras(qtd: int): void
+    +removerTerras(qtd: int): bool
+    +adicionarGraos(qtd: int): void
+    +removerGraos(qtd: int): bool
     +exibirStatus(): void
 }
 
-Main ..> Menu : cria e executa
+class Mercado {
+    -PRECO_GRAO: int
+    -PRECO_TERRA: int
+    +getPrecoGrao(): int
+    +getPrecoTerra(): int
+    +comprarGraos(cidade: Cidade, qtd: int): bool
+    +venderGraos(cidade: Cidade, qtd: int): bool
+    +comprarTerras(cidade: Cidade, qtd: int): bool
+    +venderTerras(cidade: Cidade, qtd: int): bool
+}
+
+Main ..> Menu : cria
 Menu --> Jogador : gerencia
 Menu --> Cidade : gerencia
-Cidade --> "1" Jogador : dono
+Menu --> Mercado : utiliza
+Cidade --> Jogador : dono
+Mercado ..> Cidade : utiliza
 
 @enduml

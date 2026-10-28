@@ -8,14 +8,24 @@ actor Jogador as Usuario
 rectangle "Bolonha e Milano" {
     usecase "Iniciar novo jogo" as UC1
     usecase "Ver status da cidade" as UC2
-    usecase "Ver informacoes sobre o jogo" as UC3
-    usecase "Sair do jogo" as UC4
+    usecase "Acessar mercado" as UC3
+    usecase "Comprar graos" as UC4
+    usecase "Vender graos" as UC5
+    usecase "Comprar terras" as UC6
+    usecase "Vender terras" as UC7
+    usecase "Ver informacoes sobre o jogo" as UC8
+    usecase "Sair do jogo" as UC9
 }
 
 Usuario --> UC1
 Usuario --> UC2
 Usuario --> UC3
-Usuario --> UC4
+Usuario --> UC8
+Usuario --> UC9
+
+UC4 ..> UC3 : <<extend>>
+UC5 ..> UC3 : <<extend>>
+UC6 ..> UC3 : <<extend>>
+UC7 ..> UC3 : <<extend>>
 
 @enduml
-
