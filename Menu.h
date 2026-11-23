@@ -1,12 +1,13 @@
-
 #ifndef MENU_H
 #define MENU_H
 
 #include <memory>
+
 #include "Jogador.h"
 #include "Cidade.h"
 #include "Mercado.h"
 #include "Agricultura.h"
+#include "Governo.h"
 
 class Menu {
 private:
@@ -14,8 +15,10 @@ private:
 
     std::unique_ptr<Jogador> jogador;
     std::unique_ptr<Cidade> cidade;
+
     Mercado mercado;
     Agricultura agricultura;
+    Governo governo;
 
     void iniciarNovoJogo();
     void exibirOpcoes();
@@ -30,9 +33,15 @@ private:
     void venderGraos();
     void comprarTerras();
     void venderTerras();
+
     void abrirAgricultura();
     void colher();
     void distribuirAlimentos();
+
+    void abrirGoverno();
+    void arrecadarImpostos();
+    void definirTaxaImposto();
+    void definirJustica();
 
 public:
     Menu();

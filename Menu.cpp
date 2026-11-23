@@ -29,7 +29,8 @@ void Menu::exibirOpcoes() {
     std::cout << "2 - Ver status da cidade\n";
     std::cout << "3 - Mercado\n";
     std::cout << "4 - Agricultura\n";
-    std::cout << "5 - Sobre o jogo\n";
+    std::cout << "5 - Governo\n";
+    std::cout << "6 - Sobre o jogo\n";
     std::cout << "0 - Sair\n";
     std::cout << "Escolha uma opcao: ";
 }
@@ -65,21 +66,31 @@ void Menu::processarOpcao(int opcao) {
         case 1:
             iniciarNovoJogo();
             break;
+
         case 2:
             exibirStatus();
             break;
+
         case 3:
             abrirMercado();
             break;
+
         case 4:
             abrirAgricultura();
             break;
+
         case 5:
+            abrirGoverno();
+            break;
+
+        case 6:
             exibirSobre();
             break;
+
         case 0:
             emExecucao = false;
             break;
+
         default:
             std::cout << "\nOpcao invalida!\n";
             break;
@@ -287,3 +298,132 @@ void Menu::distribuirAlimentos() {
     }
 }
 
+void Menu::abrirGoverno() {
+    if (!cidade) {
+        std::cout << "\nInicie um jogo antes de acessar o governo.\n";
+        return;
+    }
+
+    int opcao;
+
+    do {
+        std::cout << "\n========== GOVERNO ==========\n";
+
+        std::cout << "Florins disponiveis: "
+                  << cidade->getFlorins() << '\n';
+
+        std::cout << "Servos: "
+                  << cidade->getServos() << '\n';
+
+        std::cout << "Taxa de imposto: "
+                  << cidade->getTaxaImposto() << "%\n";
+
+        std::cout << "Nivel de justica: "
+                  << cidade->getNivelJustica() << '\n';
+
+        std::cout << "\n1 - Arrecadar impostos\n";
+        std::cout << "2 - Definir taxa de imposto\n";
+        std::cout << "3 - Definir nivel de justica\n";
+        std::cout << "0 - Voltar ao menu principal\n";
+
+        std::cout << "Escolha uma opcao: ";
+
+        opcao = lerOpcao();
+
+        switch (opcao) {
+            case 1:
+                arrecadarImpostos();
+                break;
+
+            case 2:
+                definirTaxaImposto();
+                break;
+
+            case 3:
+                definirJustica();
+                break;
+
+            case 0:
+                std::cout << "\nVoltando ao menu principal...\n";
+                break;
+
+            default:
+                std::cout << "\nOpcao invalida!\n";
+                break;
+        }
+
+    } while (opcao != 0);
+}
+
+void Menu::arrecadarImpostos() {
+    int arrecadado = governo.arrecadarImpostos(*cidade);
+
+    std::cout << "\nArrecadacao realizada!\n";
+    std::cout << "Florins arrecadados: "
+              << arrecadado << '\n';
+
+    std::cout << "Total de florins no tesouro: "
+              << cidade->getFlorins() << '\n';
+}
+
+void Menu::definirTaxaImposto() {
+    std::cout << "\n========== DEFINIR IMPOSTO ==========\n";
+
+    std::cout << "Taxa atual: "
+              << cidade->getTaxaImposto() << "%\n";
+
+    std::cout << "Digite a nova taxa de imposto (0 a 50): ";
+
+    int taxa = lerOpcao();
+
+    if (governo.definirTaxaImposto(*cidade, taxa)) {
+        std::cout << "\nTaxa de imposto atualizada com sucesso!\n";
+        std::cout << "Nova taxa: "
+                  << cidade->getTaxaImposto() << "%\n";
+    } else {
+        std::cout << "\nTaxa invalida! Informe um valor entre 0 e 50.\n";
+    }
+}
+
+void Menu::definirJustica() {
+    std::cout << "\n========== DEFINIR JUSTICA ==========\n";
+
+    std::cout << "Nivel atual: "
+              << cidade->getNivelJustica() << '\n';
+
+    std::cout << "\nEscolha o novo nivel de justica:\n";
+    std::cout << "1 - Justa\n";
+    std::cout << "2 - Moderada\n";
+    std::cout << "3 - Severa\n";
+    std::cout << "Opcao: ";
+
+    int opcao = lerOpcao();
+
+    std::string nivel;
+
+    switch (opcao) {
+        case 1:
+            nivel = "Justa";
+            break;
+
+        case 2:
+            nivel = "Moderada";
+            break;
+
+        case 3:
+            nivel = "Severa";
+            break;
+
+        default:
+            std::cout << "\nOpcao invalida!\n";
+            return;
+    }
+
+    if (governo.definirJustica(*cidade, nivel)) {
+        std::cout << "\nNivel de justica atualizado com sucesso!\n";
+        std::cout << "Novo nivel: "
+                  << cidade->getNivelJustica() << '\n';
+    } else {
+        std::cout << "\nNao foi possivel alterar o nivel de justica.\n";
+    }
+}

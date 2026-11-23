@@ -1,8 +1,11 @@
-
 @startuml
+title Bolonha e Milano - Diagrama de Classes (Etapa 5)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
 
 class Main {
-    +main(args: String[]): int
+    +main(): int
 }
 
 class Menu {
@@ -10,23 +13,41 @@ class Menu {
     -jogador: unique_ptr<Jogador>
     -cidade: unique_ptr<Cidade>
     -mercado: Mercado
+    -agricultura: Agricultura
+    -governo: Governo
+
+    +Menu()
     +executar(): void
+
     -iniciarNovoJogo(): void
     -exibirOpcoes(): void
     -lerOpcao(): int
-    -processarOpcao(opcao: int): void
-    -exibirStatus(): void
-    -abrirMercado(): void
     -lerQuantidade(): int
+    -processarOpcao(opcao: int): void
+    -exibirSobre(): void
+    -exibirStatus(): void
+
+    -abrirMercado(): void
     -comprarGraos(): void
     -venderGraos(): void
     -comprarTerras(): void
     -venderTerras(): void
+
+    -abrirAgricultura(): void
+    -colher(): void
+    -distribuirAlimentos(): void
+
+    -abrirGoverno(): void
+    -arrecadarImpostos(): void
+    -definirTaxaImposto(): void
+    -definirJustica(): void
 }
 
 class Jogador {
     -nome: string
     -titulo: string
+
+    +Jogador(nome: string)
     +getNome(): string
     +getTitulo(): string
 }
@@ -39,54 +60,82 @@ class Cidade {
     -terras: int
     -graos: int
     -servos: int
+    -taxaImposto: int
+    -nivelJustica: string
+
+    +Cidade(nome: string, dono: Jogador*)
     +getNome(): string
     +getAnoAtual(): int
     +getDono(): Jogador*
     +getFlorins(): int
     +getTerras(): int
     +getGraos(): int
+    +getServos(): int
+    +getTaxaImposto(): int
+    +setTaxaImposto(taxa: int): void
+    +getNivelJustica(): string
+    +setNivelJustica(nivel: string): void
     +avancarAno(): void
-    +adicionarFlorins(qtd: int): void
-    +removerFlorins(qtd: int): bool
-    +adicionarTerras(qtd: int): void
-    +removerTerras(qtd: int): bool
-    +adicionarGraos(qtd: int): void
-    +removerGraos(qtd: int): bool
+    +adicionarFlorins(quantidade: int): void
+    +removerFlorins(quantidade: int): bool
+    +adicionarTerras(quantidade: int): void
+    +removerTerras(quantidade: int): bool
+    +adicionarGraos(quantidade: int): void
+    +removerGraos(quantidade: int): bool
+    +adicionarServos(quantidade: int): void
+    +removerServos(quantidade: int): bool
     +exibirStatus(): void
-    + getServos(): int
-    + adicionarServos(quantidade: int): void
-    + removerServos(quantidade: int): bool
 }
 
 class Mercado {
     -PRECO_GRAO: int
     -PRECO_TERRA: int
+
     +getPrecoGrao(): int
     +getPrecoTerra(): int
-    +comprarGraos(cidade: Cidade, qtd: int): bool
-    +venderGraos(cidade: Cidade, qtd: int): bool
-    +comprarTerras(cidade: Cidade, qtd: int): bool
-    +venderTerras(cidade: Cidade, qtd: int): bool
+    +comprarGraos(cidade: Cidade&, quantidade: int): bool
+    +venderGraos(cidade: Cidade&, quantidade: int): bool
+    +comprarTerras(cidade: Cidade&, quantidade: int): bool
+    +venderTerras(cidade: Cidade&, quantidade: int): bool
 }
 
 class Agricultura {
-    - HECTARES_POR_SERVO: int
-    - RENDIMENTO_POR_HECTARE: int
-    - SERVOS_POR_GRAO: int
-    - CRESCIMENTO_PERCENTUAL: int
-    - PERCENTUAL_MINIMO: int
-    - PERCENTUAL_MAXIMO: int
-    + processarColheita(cidade: Cidade): int
-    + distribuirAlimentos(cidade: Cidade, percentual: int): bool
+    -HECTARES_POR_SERVO: int
+    -RENDIMENTO_POR_HECTARE: int
+    -SERVOS_POR_GRAO: int
+    -CRESCIMENTO_PERCENTUAL: int
+    -PERCENTUAL_MINIMO: int
+    -PERCENTUAL_MAXIMO: int
+
+    +processarColheita(cidade: Cidade&): int
+    +distribuirAlimentos(cidade: Cidade&, percentual: int): bool
 }
 
-Main ..> Menu : cria
-Menu --> Jogador : gerencia
-Menu --> Cidade : gerencia
-Menu --> Mercado : utiliza
+class Governo {
+    -TAXA_MAXIMA: int
+    -MULTIPLICADOR_JUSTA: double
+    -MULTIPLICADOR_MODERADA: double
+    -MULTIPLICADOR_SEVERA: double
+
+    -multiplicadorPara(nivel: string): double
+
+    +arrecadarImpostos(cidade: Cidade&): int
+    +definirTaxaImposto(cidade: Cidade&, taxa: int): bool
+    +definirJustica(cidade: Cidade&, nivel: string): bool
+}
+
+Main ..> Menu : cria e executa
+
+Menu *-- Jogador
+Menu *-- Cidade
+Menu *-- Mercado
+Menu *-- Agricultura
+Menu *-- Governo
+
 Cidade --> Jogador : dono
+
 Mercado ..> Cidade : utiliza
-Menu --> Agricultura : utiliza
 Agricultura ..> Cidade : utiliza
+Governo ..> Cidade : utiliza
 
 @enduml

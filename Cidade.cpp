@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <limits>
 #include "Cidade.h"
@@ -12,6 +11,9 @@ Cidade::Cidade(const std::string& nome, Jogador* dono) {
     this->terras = 10000;
     this->graos = 500;
     this->servos = 200;
+
+    this->taxaImposto = 10;
+    this->nivelJustica = "Moderada";
 }
 
 std::string Cidade::getNome() const {
@@ -40,6 +42,22 @@ int Cidade::getGraos() const {
 
 int Cidade::getServos() const {
     return servos;
+}
+
+int Cidade::getTaxaImposto() const {
+    return taxaImposto;
+}
+
+void Cidade::setTaxaImposto(int taxa) {
+    taxaImposto = taxa;
+}
+
+std::string Cidade::getNivelJustica() const {
+    return nivelJustica;
+}
+
+void Cidade::setNivelJustica(const std::string& nivel) {
+    nivelJustica = nivel;
 }
 
 void Cidade::adicionarServos(int quantidade) {
@@ -118,9 +136,17 @@ void Cidade::exibirStatus() const {
     std::cout << "Governante: " << dono->getNome() << '\n';
     std::cout << "Titulo: " << dono->getTitulo() << '\n';
     std::cout << "Ano atual: " << anoAtual << '\n';
+
     std::cout << "Florins: " << florins << '\n';
     std::cout << "Terras: " << terras << " hectares\n";
     std::cout << "Graos: " << graos << " unidades\n";
     std::cout << "Servos: " << servos << '\n';
+
+    std::cout << "Taxa de imposto: "
+              << taxaImposto << "%\n";
+
+    std::cout << "Nivel de justica: "
+              << nivelJustica << '\n';
+
     std::cout << "======================================\n";
 }

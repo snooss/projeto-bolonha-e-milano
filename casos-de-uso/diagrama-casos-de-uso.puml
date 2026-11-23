@@ -1,31 +1,54 @@
-
 @startuml
+title Bolonha e Milano - Diagrama de Casos de Uso (Etapa 5)
 
 left to right direction
 
-actor Jogador as Usuario
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor Jogador
 
 rectangle "Bolonha e Milano" {
+
     usecase "Iniciar novo jogo" as UC1
     usecase "Ver status da cidade" as UC2
     usecase "Acessar mercado" as UC3
-    usecase "Comprar graos" as UC4
-    usecase "Vender graos" as UC5
-    usecase "Comprar terras" as UC6
-    usecase "Vender terras" as UC7
-    usecase "Ver informacoes sobre o jogo" as UC8
-    usecase "Sair do jogo" as UC9
+    usecase "Acessar agricultura" as UC4
+    usecase "Acessar governo" as UC5
+    usecase "Ver informações\nsobre o jogo" as UC6
+    usecase "Sair do jogo" as UC7
+
+    usecase "Comprar grãos" as UC8
+    usecase "Vender grãos" as UC9
+    usecase "Comprar terras" as UC10
+    usecase "Vender terras" as UC11
+
+    usecase "Colher\n(processar safra)" as UC12
+    usecase "Distribuir alimentos" as UC13
+
+    usecase "Arrecadar impostos" as UC14
+    usecase "Definir taxa\nde imposto" as UC15
+    usecase "Definir nível\nde justiça" as UC16
 }
 
-Usuario --> UC1
-Usuario --> UC2
-Usuario --> UC3
-Usuario --> UC8
-Usuario --> UC9
+Jogador --> UC1
+Jogador --> UC2
+Jogador --> UC3
+Jogador --> UC4
+Jogador --> UC5
+Jogador --> UC6
+Jogador --> UC7
 
-UC4 ..> UC3 : <<extend>>
-UC5 ..> UC3 : <<extend>>
-UC6 ..> UC3 : <<extend>>
-UC7 ..> UC3 : <<extend>>
+UC8 ..> UC3 : <<extend>>
+UC9 ..> UC3 : <<extend>>
+UC10 ..> UC3 : <<extend>>
+UC11 ..> UC3 : <<extend>>
+
+UC12 ..> UC4 : <<extend>>
+UC13 ..> UC4 : <<extend>>
+
+UC14 ..> UC5 : <<extend>>
+UC15 ..> UC5 : <<extend>>
+UC16 ..> UC5 : <<extend>>
 
 @enduml
