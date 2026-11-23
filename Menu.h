@@ -1,27 +1,25 @@
-
 #ifndef MENU_H
 #define MENU_H
 
 #include <memory>
-
-#include "Jogador.h"
-#include "Cidade.h"
+#include <string>
+#include "Partida.h"
 #include "Mercado.h"
 #include "Agricultura.h"
 #include "Governo.h"
 #include "Construcoes.h"
+#include "Nobreza.h"
 
 class Menu {
 private:
     bool emExecucao;
-
-    std::unique_ptr<Jogador> jogador;
-    std::unique_ptr<Cidade> cidade;
-
+    std::unique_ptr<Partida> partida;
+    Cidade* cidade;
     Mercado mercado;
     Agricultura agricultura;
     Governo governo;
     Construcoes construcoes;
+    Nobreza nobreza;
 
     void iniciarNovoJogo();
     void exibirOpcoes();
@@ -30,25 +28,13 @@ private:
     void processarOpcao(int opcao);
     void exibirSobre();
     void exibirStatus();
-
-    void abrirMercado();
-    void comprarGraos();
-    void venderGraos();
-    void comprarTerras();
-    void venderTerras();
-
-    void abrirAgricultura();
-    void colher();
-    void distribuirAlimentos();
-
-    void abrirGoverno();
-    void arrecadarImpostos();
-    void definirTaxaImposto();
-    void definirJustica();
-
-    void abrirConstrucoes();
-    void recrutarSoldados();
-    void construir();
+    void abrirMercado(); void comprarGraos(); void venderGraos(); void comprarTerras(); void venderTerras();
+    void abrirAgricultura(); void colher(); void distribuirAlimentos();
+    void abrirGoverno(); void arrecadarImpostos(); void definirTaxaImposto(); void definirJustica();
+    void abrirConstrucoes(); void recrutarSoldados(); void construir();
+    void encerrarTurno();
+    void exibirClassificacao() const;
+    void encerrarPartida();
 
 public:
     Menu();

@@ -1,64 +1,43 @@
-
 #include <iostream>
 #include <string>
 #include <limits>
 #include <stdexcept>
-
 #include "Menu.h"
 
-Menu::Menu() {
-    emExecucao = true;
-}
+Menu::Menu() : emExecucao(true), cidade(nullptr) {}
 
 void Menu::executar() {
     while (emExecucao) {
         exibirOpcoes();
-        int opcao = lerOpcao();
-        processarOpcao(opcao);
+        processarOpcao(lerOpcao());
     }
-
     std::cout << "\nJogo encerrado. Ate nunca mais!\n";
 }
 
-
 void Menu::exibirOpcoes() {
-    std::cout << "\n==========================================\n";
-    std::cout << "             BOLONHA E MILANO\n";
-    std::cout << " Um jogo de estrategia economica medieval\n";
-    std::cout << "==========================================\n";
-
-    std::cout << "1 - Novo jogo\n";
-    std::cout << "2 - Ver status da cidade\n";
-    std::cout << "3 - Mercado\n";
-    std::cout << "4 - Agricultura\n";
-    std::cout << "5 - Governo\n";
-    std::cout << "6 - Construcoes\n";
-    std::cout << "7 - Sobre o jogo\n";
-    std::cout << "0 - Sair\n";
-
-    std::cout << "Escolha uma opcao: ";
+    std::cout << "\n==========================================\n"
+              << "             BOLONHA E MILANO\n"
+              << " Um jogo de estrategia economica medieval\n"
+              << "==========================================\n";
+    if (partida) {
+        std::cout << "Ano: " << partida->getAnoAtual() << " | Jogador da vez: "
+                  << cidade->getDono()->getNome() << " | Cidade: " << cidade->getNome() << "\n";
+    }
+    std::cout << "1 - Novo jogo\n2 - Ver status da cidade\n3 - Mercado\n"
+              << "4 - Agricultura\n5 - Governo\n6 - Construcoes\n"
+              << "7 - Encerrar turno\n8 - Ver classificacao\n9 - Sobre o jogo\n0 - Sair\n"
+              << "Escolha uma opcao: ";
 }
-
 
 int Menu::lerOpcao() {
     std::string entrada;
     std::getline(std::cin, entrada);
-
     try {
         std::size_t posicao;
         int opcao = std::stoi(entrada, &posicao);
-
-        if (entrada.find_first_not_of(" \t\r\n", posicao)
-            != std::string::npos) {
-            return -1;
-        }
-
+        if (entrada.find_first_not_of(" \\t\\r\n", posicao) != std::string::npos) return -1;
         return opcao;
-    } catch (const std::invalid_argument&) {
-        return -1;
-    } catch (const std::out_of_range&) {
-        return -1;
-    }
+    } catch (const std::exception&) { return -1; }
 }
 
 int Menu::lerQuantidade() {
@@ -66,87 +45,68 @@ int Menu::lerQuantidade() {
     return lerOpcao();
 }
 
-
 void Menu::processarOpcao(int opcao) {
     switch (opcao) {
-        case 1:
-            iniciarNovoJogo();
-            break;
-
-        case 2:
-            exibirStatus();
-            break;
-
-        case 3:
-            abrirMercado();
-            break;
-
-        case 4:
-            abrirAgricultura();
-            break;
-
-        case 5:
-            abrirGoverno();
-            break;
-
-        case 6:
-            abrirConstrucoes();
-            break;
-
-        case 7:
-            exibirSobre();
-            break;
-
-        case 0:
-            emExecucao = false;
-            break;
-
-        default:
-            std::cout << "\nOpcao invalida!\n";
-            break;
+        case 1: iniciarNovoJogo(); break;
+        case 2: exibirStatus(); break;
+        case 3: abrirMercado(); break;
+        case 4: abrirAgricultura(); break;
+        case 5: abrirGoverno(); break;
+        case 6: abrirConstrucoes(); break;
+        case 7: encerrarTurno(); break;
+        case 8: exibirClassificacao(); break;
+        case 9: exibirSobre(); break;
+        case 0: emExecucao = false; break;
+        default: std::cout << "\nOpcao invalida!\n"; break;
     }
 }
 
-
 void Menu::iniciarNovoJogo() {
-    std::string nomeJogador;
-    std::string nomeCidade;
-
-    std::cout << "\nDigite o nome do jogador: ";
-    std::getline(std::cin, nomeJogador);
-
-    std::cout << "Digite o nome da cidade (Bolonha ou Milano): ";
-    std::getline(std::cin, nomeCidade);
-
-    if (nomeJogador.find_first_not_of(" \t\r\n") ==
-            std::string::npos ||
-        nomeCidade.find_first_not_of(" \t\r\n") ==
-            std::string::npos) {
-        std::cout << "\nOs nomes nao podem ficar vazios.\n";
-        return;
+    int quantidade;
+    std::cout << "\nQuantos jogadores participarao? (1 a 4; padrao 2): ";
+    quantidade = lerOpcao();
+    if (quantidade < 1 || quantidade > 4) {
+        quantidade = 2;
+        std::cout << "Quantidade invalida. O jogo sera iniciado com 2 jogadores.\n";
     }
 
-    jogador = std::make_unique<Jogador>(nomeJogador);
-    cidade = std::make_unique<Cidade>(
-        nomeCidade, jogador.get()
-    );
+    const std::string cidadesDisponiveis[4] = {"Bolonha", "Milano", "Florenca", "Veneza"};
+    bool cidadeOcupada[4] = {false, false, false, false};
+    partida = std::make_unique<Partida>();
+    for (int i = 0; i < quantidade; ++i) {
+        std::string nome;
+        std::cout << "\nNome do jogador " << (i + 1) << ": ";
+        std::getline(std::cin, nome);
+        if (nome.find_first_not_of(" \t\r\n") == std::string::npos)
+            nome = "Jogador " + std::to_string(i + 1);
 
-    std::cout << "\nNovo jogo iniciado!\n";
+        int escolhaCidade = -1;
+        while (escolhaCidade < 1 || escolhaCidade > 4 || cidadeOcupada[escolhaCidade - 1]) {
+            std::cout << "Escolha a cidade de " << nome << ":\n";
+            for (int j = 0; j < 4; ++j) {
+                std::cout << (j + 1) << " - " << cidadesDisponiveis[j]
+                          << (cidadeOcupada[j] ? " (indisponivel)" : "") << '\n';
+            }
+            std::cout << "Opcao: ";
+            escolhaCidade = lerOpcao();
+            if (escolhaCidade < 1 || escolhaCidade > 4 || cidadeOcupada[escolhaCidade - 1])
+                std::cout << "Escolha invalida ou cidade ja selecionada. Tente novamente.\n";
+        }
+        cidadeOcupada[escolhaCidade - 1] = true;
+        partida->adicionarCidade(nome, cidadesDisponiveis[escolhaCidade - 1]);
+    }
+    cidade = partida->getCidadeAtual();
+    std::cout << "\nNova partida iniciada com " << quantidade << " jogador(es)!\n";
     cidade->exibirStatus();
 }
 
 void Menu::exibirStatus() {
-    if (!cidade) {
-        std::cout << "\nNenhum jogo foi iniciado ainda.\n";
-        return;
-    }
-
+    if (!partida || !cidade) { std::cout << "\nInicie um novo jogo primeiro.\n"; return; }
     cidade->exibirStatus();
 }
 
 void Menu::exibirSobre() {
-    std::cout << "\nBolonha e Milano é um jogo de estrategia\n";
-    std::cout << "economica medieval desenvolvido em C++.\n";
+    std::cout << "\nBolonha e Milano e um jogo de estrategia economica medieval desenvolvido em C++.\n";
 }
 
 void Menu::abrirMercado() {
@@ -281,15 +241,11 @@ void Menu::abrirAgricultura() {
 
 void Menu::colher() {
     int hectares = agricultura.processarColheita(*cidade);
-
-    if (hectares > 0) {
-        std::cout << "\nColheita realizada!\n";
-        std::cout << "Hectares cultivados: "
-                  << hectares << '\n';
-        std::cout << "Graos apos a colheita: "
-                  << cidade->getGraos() << '\n';
+    if (hectares == -1) {
+        std::cout << "\nEsta cidade ja realizou a colheita neste ano.\n";
     } else {
-        std::cout << "\nNao foi possivel realizar a colheita.\n";
+        std::cout << "\nColheita realizada!\nHectares cultivados: " << hectares
+                  << "\nGraos apos a colheita: " << cidade->getGraos() << '\n';
     }
 }
 
@@ -368,13 +324,12 @@ void Menu::abrirGoverno() {
 
 void Menu::arrecadarImpostos() {
     int arrecadado = governo.arrecadarImpostos(*cidade);
-
-    std::cout << "\nArrecadacao realizada!\n";
-    std::cout << "Florins arrecadados: "
-              << arrecadado << '\n';
-
-    std::cout << "Total de florins no tesouro: "
-              << cidade->getFlorins() << '\n';
+    if (arrecadado == -1) {
+        std::cout << "\nOs impostos desta cidade ja foram arrecadados neste ano.\n";
+        return;
+    }
+    std::cout << "\nArrecadacao realizada!\nFlorins arrecadados: " << arrecadado
+              << "\nTotal de florins no tesouro: " << cidade->getFlorins() << '\n';
 }
 
 void Menu::definirTaxaImposto() {
@@ -528,3 +483,57 @@ void Menu::construir() {
     }
 }
 
+
+
+void Menu::exibirClassificacao() const {
+    if (!partida) { std::cout << "\nNenhuma partida iniciada.\n"; return; }
+    std::cout << "\n============= CLASSIFICACAO =============\n";
+    for (const auto& c : partida->getCidades()) {
+        int prestigio = nobreza.calcularPrestigio(*c);
+        int falta = nobreza.prestigioParaProximoTitulo(*c->getDono());
+        std::cout << c->getDono()->getNome() << " | " << c->getNome()
+                  << " | " << c->getDono()->getTitulo()
+                  << " | Prestigio: " << prestigio;
+        if (falta < 0) std::cout << " | Monarca";
+        else std::cout << " | Faltam: " << (prestigio >= falta ? 0 : falta - prestigio)
+                       << " para o proximo titulo";
+        std::cout << '\n';
+    }
+    std::cout << "==========================================\n";
+}
+
+void Menu::encerrarTurno() {
+    if (!partida || !cidade) { std::cout << "\nInicie um novo jogo primeiro.\n"; return; }
+    bool anoEncerrado = partida->passarTurno();
+    if (!anoEncerrado) {
+        cidade = partida->getCidadeAtual();
+        std::cout << "\nTurno encerrado. Agora e a vez de " << cidade->getDono()->getNome()
+                  << " (" << cidade->getNome() << ").\n";
+        return;
+    }
+
+    std::cout << "\nTodos os jogadores encerraram seus turnos. Fechando o ano...\n";
+    auto promovidas = partida->encerrarAno(nobreza);
+    for (Cidade* c : promovidas) {
+        std::cout << c->getDono()->getNome() << " foi promovido(a) a "
+                  << c->getDono()->getTitulo() << "!\n";
+    }
+    exibirClassificacao();
+    if (partida->terminou()) { encerrarPartida(); return; }
+    cidade = partida->getCidadeAtual();
+    std::cout << "Novo ano: " << partida->getAnoAtual() << ". Comeca a vez de "
+              << cidade->getDono()->getNome() << ".\n";
+}
+
+void Menu::encerrarPartida() {
+    Cidade* vencedor = partida->determinarVencedor(nobreza);
+    if (vencedor) {
+        std::cout << "\n========== FIM DE JOGO ==========\nVencedor: "
+                  << vencedor->getDono()->getNome() << " - " << vencedor->getNome()
+                  << " (" << vencedor->getDono()->getTitulo() << ")\nPrestigio: "
+                  << nobreza.calcularPrestigio(*vencedor) << '\n';
+    }
+    std::cout << "=================================\n";
+    partida.reset();
+    cidade = nullptr;
+}

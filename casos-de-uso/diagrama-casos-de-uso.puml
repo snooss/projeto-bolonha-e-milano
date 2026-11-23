@@ -1,41 +1,34 @@
-
 @startuml
-title Bolonha e Milano - Diagrama de Casos de Uso (Etapa 6)
-
+title Bolonha e Milano - Diagrama de Casos de Uso (Etapa 7)
 left to right direction
-
 skinparam packageStyle rectangle
 skinparam shadowing false
-
 actor Jogador
-
 rectangle "Bolonha e Milano" {
-
-    usecase "Iniciar novo jogo" as UC1
-    usecase "Ver status da cidade" as UC2
-    usecase "Acessar mercado" as UC3
-    usecase "Acessar agricultura" as UC4
-    usecase "Acessar governo" as UC5
-    usecase "Acessar construcoes" as UC6
-    usecase "Ver informacoes sobre o jogo" as UC7
-    usecase "Sair do jogo" as UC8
-
-    usecase "Comprar graos" as UC9
-    usecase "Vender graos" as UC10
-    usecase "Comprar terras" as UC11
-    usecase "Vender terras" as UC12
-
-    usecase "Colher (processar safra)" as UC13
-    usecase "Distribuir alimentos" as UC14
-
-    usecase "Arrecadar impostos" as UC15
-    usecase "Definir taxa de imposto" as UC16
-    usecase "Definir nivel de justica" as UC17
-
-    usecase "Recrutar soldados" as UC18
-    usecase "Construir" as UC19
+ usecase "Iniciar novo jogo" as UC1
+ usecase "Ver status da cidade" as UC2
+ usecase "Acessar mercado" as UC3
+ usecase "Acessar agricultura" as UC4
+ usecase "Acessar governo" as UC5
+ usecase "Acessar construcoes" as UC6
+ usecase "Encerrar turno" as UC7
+ usecase "Ver classificacao" as UC8
+ usecase "Ver informacoes sobre o jogo" as UC9
+ usecase "Sair do jogo" as UC10
+ usecase "Comprar graos" as UC11
+ usecase "Vender graos" as UC12
+ usecase "Comprar terras" as UC13
+ usecase "Vender terras" as UC14
+ usecase "Colher (processar safra)" as UC15
+ usecase "Distribuir alimentos" as UC16
+ usecase "Arrecadar impostos" as UC17
+ usecase "Definir taxa de imposto" as UC18
+ usecase "Definir nivel de justica" as UC19
+ usecase "Recrutar soldados" as UC20
+ usecase "Construir" as UC21
+ usecase "Fechar o ano / promover titulos" as UC22
+ usecase "Declarar vencedor" as UC23
 }
-
 Jogador --> UC1
 Jogador --> UC2
 Jogador --> UC3
@@ -44,20 +37,23 @@ Jogador --> UC5
 Jogador --> UC6
 Jogador --> UC7
 Jogador --> UC8
-
-UC9 ..> UC3 : <<extend>>
-UC10 ..> UC3 : <<extend>>
+Jogador --> UC9
+Jogador --> UC10
 UC11 ..> UC3 : <<extend>>
 UC12 ..> UC3 : <<extend>>
-
-UC13 ..> UC4 : <<extend>>
-UC14 ..> UC4 : <<extend>>
-
-UC15 ..> UC5 : <<extend>>
-UC16 ..> UC5 : <<extend>>
+UC13 ..> UC3 : <<extend>>
+UC14 ..> UC3 : <<extend>>
+UC15 ..> UC4 : <<extend>>
+UC16 ..> UC4 : <<extend>>
 UC17 ..> UC5 : <<extend>>
-
-UC18 ..> UC6 : <<extend>>
-UC19 ..> UC6 : <<extend>>
-
+UC18 ..> UC5 : <<extend>>
+UC19 ..> UC5 : <<extend>>
+UC20 ..> UC6 : <<extend>>
+UC21 ..> UC6 : <<extend>>
+UC22 ..> UC7 : <<extend>>
+UC23 ..> UC22 : <<extend>>
+note right of UC22 : Acontece somente quando
+todos encerram seus turnos
+note right of UC23 : Acontece quando alguem vira
+Rei/Rainha ou o ano passa de 1410
 @enduml
