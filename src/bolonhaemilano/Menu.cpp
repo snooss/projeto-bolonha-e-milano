@@ -10,11 +10,27 @@ void Menu::executar() {
     while (emExecucao) {
         exibirOpcoes();
         processarOpcao(lerOpcao());
+        if (emExecucao) {
+            pausar();
+        }
     }
     std::cout << "\nJogo encerrado. Ate nunca mais!\n";
 }
 
+void Menu::limparTela() {
+
+    std::cout << "\033[2J\033[H";
+    std::cout.flush();
+}
+
+void Menu::pausar() {
+    std::cout << "\nPressione ENTER para continuar...";
+    std::string linha;
+    std::getline(std::cin, linha);
+}
+
 void Menu::exibirOpcoes() {
+    limparTela();
     std::cout << "\n==========================================\n"
               << "             BOLONHA E MILANO\n"
               << " Um jogo de estrategia economica medieval\n"

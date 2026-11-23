@@ -22,6 +22,8 @@ private:
     Nobreza nobreza;
 
     void iniciarNovoJogo();
+    void limparTela();
+    void pausar();
     void exibirOpcoes();
     int lerOpcao();
     int lerQuantidade();
