@@ -1,88 +1,103 @@
 @startuml
-title Bolonha e Milano - Diagrama de Classes (Etapa 7)
+title Bolonha e Milano - Diagrama de Classes (Etapa 8)
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
 
-class Main { +main(): int }
+class Main {
+  +main(): int
+}
 class Menu {
- -emExecucao: bool
- -partida: unique_ptr<Partida>
- -cidade: Cidade*
- -mercado: Mercado
- -agricultura: Agricultura
- -governo: Governo
- -construcoes: Construcoes
- -nobreza: Nobreza
- +Menu()
- +executar(): void
- -iniciarNovoJogo(): void
- -encerrarTurno(): void
- -exibirClassificacao(): void
- -encerrarPartida(): void
- -exibirStatus(): void
- -abrirMercado(): void
- -abrirAgricultura(): void
- -abrirGoverno(): void
- -abrirConstrucoes(): void
+  -emExecucao: bool
+  -partida: unique_ptr<Partida>
+  -cidade: Cidade*
+  -mercado: Mercado
+  -agricultura: Agricultura
+  -governo: Governo
+  -construcoes: Construcoes
+  -nobreza: Nobreza
+  +Menu()
+  +executar(): void
+  -lerOpcao(): int
+  -lerQuantidade(): int
+  -lerInteiro(): int
+  -exigirJogoEmAndamento(): bool
+  -iniciarNovoJogo(): void
+  -exibirStatus(): void
+  -abrirMercado(): void
+  -abrirAgricultura(): void
+  -abrirGoverno(): void
+  -abrirConstrucoes(): void
+  -encerrarTurno(): void
+  -exibirClassificacao(): void
+  -encerrarPartida(): void
+  -exibirSobre(): void
+}
+class Testes {
+  {static} -aprovados: int
+  {static} -reprovados: int
+  {static} +main(): int
+  {static} -verificar(descricao, condicao): void
+  {static} -novaCidade(): Cidade
+  {static} -testarCidade(): void
+  {static} -testarMercado(): void
+  {static} -testarAgricultura(): void
+  {static} -testarGoverno(): void
+  {static} -testarConstrucoes(): void
+  {static} -testarJogadorENobreza(): void
+  {static} -testarPartida(): void
 }
 class Jogador {
- {static} -TITULOS: string[6]
- -nome: string
- -nivelTitulo: int
- +Jogador(nome: string)
- +getNome(): string
- +getTitulo(): string
- +getNivelTitulo(): int
- +promover(): bool
- +ehMonarca(): bool
+  {static} -TITULOS: string[6]
+  -nome: string
+  -nivelTitulo: int
+  +Jogador(nome: string)
+  +getNome(): string
+  +getTitulo(): string
+  +getNivelTitulo(): int
+  +promover(): bool
+  +ehMonarca(): bool
 }
 class Cidade {
- -nome: string
- -anoAtual: int
- -dono: Jogador*
- -florins/terras/graos/servos: int
- -taxaImposto: int
- -nivelJustica: string
- -soldados/construcoes: int
- -colheitaFeita: bool
- -impostosArrecadados: bool
- +getNome()/getAnoAtual()/getDono()
- +avancarAno(): void
- +isColheitaFeita(): bool
- +marcarColheitaFeita(): void
- +isImpostosArrecadados(): bool
- +marcarImpostosArrecadados(): void
- +adicionar*/remover* recursos
- +exibirStatus(): void
+  -nome: string
+  -anoAtual: int
+  -dono: Jogador*
+  -florins/terras/graos/servos: int
+  -taxaImposto: int
+  -nivelJustica: string
+  -soldados/construcoes: int
+  -colheitaFeita: bool
+  -impostosArrecadados: bool
+  +Cidade(nome, dono)
+  +getNome()/getAnoAtual()/getDono()
+  +getFlorins()/getTerras()/getGraos()/getServos()
+  +getSoldados()/getConstrucoes()
+  +avancarAno(): void
+  +adicionar*/remover* recursos
+  +exibirStatus(): void
 }
 class Partida {
- {static} -MAXIMO_JOGADORES: int = 4
- {static} -ANO_FINAL: int = 1410
- -jogadores: vector<unique_ptr<Jogador>>
- -cidades: vector<unique_ptr<Cidade>>
- -indiceAtual: size_t
- +adicionarCidade(nomeJogador, nomeCidade): bool
- +getCidades(): vector<Cidade>
- +getCidadeAtual(): Cidade*
- +getAnoAtual(): int
- +passarTurno(): bool
- +encerrarAno(nobreza): vector<Cidade*>
- +terminou(): bool
- +determinarVencedor(nobreza): Cidade*
+  {static} -MAXIMO_JOGADORES: int = 4
+  {static} -ANO_FINAL: int = 1410
+  -jogadores: vector<unique_ptr<Jogador>>
+  -cidades: vector<unique_ptr<Cidade>>
+  -indiceAtual: size_t
+  +adicionarCidade(nomeJogador, nomeCidade): bool
+  +getCidades(): vector<Cidade>
+  +getCidadeAtual(): Cidade*
+  +getAnoAtual(): int
+  +passarTurno(): bool
+  +encerrarAno(nobreza): vector<Cidade*>
+  +terminou(): bool
+  +determinarVencedor(nobreza): Cidade*
 }
 class Mercado { +comprarGraos(cidade, qtd): bool +venderGraos(cidade, qtd): bool +comprarTerras(cidade, qtd): bool +venderTerras(cidade, qtd): bool }
 class Agricultura { +processarColheita(cidade): int +distribuirAlimentos(cidade, percentual): bool }
 class Governo { +arrecadarImpostos(cidade): int +definirTaxaImposto(cidade, taxa): bool +definirJustica(cidade, nivel): bool }
 class Construcoes { +recrutarSoldados(cidade, qtd): bool +construir(cidade, qtd): bool }
 class Nobreza {
- -PESO_CONSTRUCAO: int = 10
- -PESO_SOLDADO: int = 2
- -PESO_SERVO: int = 1
- -HECTARES_POR_PONTO: int = 100
- -PRESTIGIO_MINIMO: int[6] = {0,400,550,700,850,1000}
- +calcularPrestigio(cidade): int
- +prestigioParaProximoTitulo(jogador): int
- +verificarPromocao(cidade): bool
+  +calcularPrestigio(cidade): int
+  +prestigioParaProximoTitulo(jogador): int
+  +verificarPromocao(cidade): bool
 }
 
 Main ..> Menu
@@ -102,4 +117,18 @@ Construcoes ..> Cidade
 Nobreza ..> Cidade
 Nobreza ..> Jogador
 Partida ..> Nobreza
+
+Testes ..> Cidade : testa
+Testes ..> Mercado : testa
+Testes ..> Agricultura : testa
+Testes ..> Governo : testa
+Testes ..> Construcoes : testa
+Testes ..> Jogador : testa
+Testes ..> Nobreza : testa
+Testes ..> Partida : testa
+
+note bottom of Testes
+  Executável de testes independente.
+  Nenhuma classe do jogo depende de Testes.
+end note
 @enduml

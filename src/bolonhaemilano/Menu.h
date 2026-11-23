@@ -25,6 +25,8 @@ private:
     void exibirOpcoes();
     int lerOpcao();
     int lerQuantidade();
+    int lerInteiro();
+    bool exigirJogoEmAndamento();
     void processarOpcao(int opcao);
     void exibirSobre();
     void exibirStatus();
@@ -33,7 +35,7 @@ private:
     void abrirGoverno(); void arrecadarImpostos(); void definirTaxaImposto(); void definirJustica();
     void abrirConstrucoes(); void recrutarSoldados(); void construir();
     void encerrarTurno();
-    void exibirClassificacao() const;
+    void exibirClassificacao();
     void encerrarPartida();
 
 public:

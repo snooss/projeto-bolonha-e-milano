@@ -29,20 +29,34 @@ void Menu::exibirOpcoes() {
               << "Escolha uma opcao: ";
 }
 
-int Menu::lerOpcao() {
+int Menu::lerInteiro() {
     std::string entrada;
-    std::getline(std::cin, entrada);
+    if (!std::getline(std::cin, entrada)) return -1;
     try {
-        std::size_t posicao;
-        int opcao = std::stoi(entrada, &posicao);
-        if (entrada.find_first_not_of(" \\t\\r\n", posicao) != std::string::npos) return -1;
-        return opcao;
-    } catch (const std::exception&) { return -1; }
+        std::size_t posicao = 0;
+        int valor = std::stoi(entrada, &posicao);
+        if (entrada.find_first_not_of(" \\t\\r\\n", posicao) != std::string::npos) return -1;
+        return valor;
+    } catch (const std::exception&) {
+        return -1;
+    }
+}
+
+int Menu::lerOpcao() {
+    return lerInteiro();
 }
 
 int Menu::lerQuantidade() {
     std::cout << "Digite a quantidade: ";
-    return lerOpcao();
+    return lerInteiro();
+}
+
+bool Menu::exigirJogoEmAndamento() {
+    if (!partida || !cidade) {
+        std::cout << "\nNenhum jogo em andamento. Inicie um novo jogo primeiro.\n";
+        return false;
+    }
+    return true;
 }
 
 void Menu::processarOpcao(int opcao) {
@@ -70,7 +84,7 @@ void Menu::iniciarNovoJogo() {
         std::cout << "Quantidade invalida. O jogo sera iniciado com 2 jogadores.\n";
     }
 
-    const std::string cidadesDisponiveis[4] = {"Bolonha", "Milano", "Florenca", "Veneza"};
+    const std::string cidadesDisponiveis[4] = {"Bolonha", "Milano", "Florença", "Veneza"};
     bool cidadeOcupada[4] = {false, false, false, false};
     partida = std::make_unique<Partida>();
     for (int i = 0; i < quantidade; ++i) {
@@ -101,7 +115,7 @@ void Menu::iniciarNovoJogo() {
 }
 
 void Menu::exibirStatus() {
-    if (!partida || !cidade) { std::cout << "\nInicie um novo jogo primeiro.\n"; return; }
+    if (!exigirJogoEmAndamento()) return;
     cidade->exibirStatus();
 }
 
@@ -110,10 +124,7 @@ void Menu::exibirSobre() {
 }
 
 void Menu::abrirMercado() {
-    if (!cidade) {
-        std::cout << "\nInicie um jogo antes de acessar o mercado.\n";
-        return;
-    }
+    if (!exigirJogoEmAndamento()) return;
 
     int opcao;
     do {
@@ -197,10 +208,7 @@ void Menu::venderTerras() {
 
 
 void Menu::abrirAgricultura() {
-    if (!cidade) {
-        std::cout << "\nInicie um jogo primeiro!\n";
-        return;
-    }
+    if (!exigirJogoEmAndamento()) return;
 
     int opcao;
 
@@ -266,10 +274,7 @@ void Menu::distribuirAlimentos() {
 }
 
 void Menu::abrirGoverno() {
-    if (!cidade) {
-        std::cout << "\nInicie um jogo antes de acessar o governo.\n";
-        return;
-    }
+    if (!exigirJogoEmAndamento()) return;
 
     int opcao;
 
@@ -395,10 +400,7 @@ void Menu::definirJustica() {
 }
 
 void Menu::abrirConstrucoes() {
-    if (!cidade) {
-        std::cout << "\nInicie um jogo antes de acessar construcoes.\n";
-        return;
-    }
+    if (!exigirJogoEmAndamento()) return;
 
     int opcao;
 
@@ -485,8 +487,8 @@ void Menu::construir() {
 
 
 
-void Menu::exibirClassificacao() const {
-    if (!partida) { std::cout << "\nNenhuma partida iniciada.\n"; return; }
+void Menu::exibirClassificacao() {
+    if (!exigirJogoEmAndamento()) return;
     std::cout << "\n============= CLASSIFICACAO =============\n";
     for (const auto& c : partida->getCidades()) {
         int prestigio = nobreza.calcularPrestigio(*c);
@@ -503,7 +505,7 @@ void Menu::exibirClassificacao() const {
 }
 
 void Menu::encerrarTurno() {
-    if (!partida || !cidade) { std::cout << "\nInicie um novo jogo primeiro.\n"; return; }
+    if (!exigirJogoEmAndamento()) return;
     bool anoEncerrado = partida->passarTurno();
     if (!anoEncerrado) {
         cidade = partida->getCidadeAtual();

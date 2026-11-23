@@ -1,28 +1,57 @@
 {
-    "tasks": [
-        {
-            "type": "cppbuild",
-            "label": "C/C++: g++ arquivo de build ativo",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Tarefa gerada pelo Depurador."
-        }
-    ],
-    "version": "2.0.0"
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar jogo - Bolonha e Milano",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-pedantic",
+        "-Isrc/bolonhaemilano",
+        "src/bolonhaemilano/main.cpp",
+        "src/bolonhaemilano/Cidade.cpp",
+        "src/bolonhaemilano/Jogador.cpp",
+        "src/bolonhaemilano/Mercado.cpp",
+        "src/bolonhaemilano/Agricultura.cpp",
+        "src/bolonhaemilano/Governo.cpp",
+        "src/bolonhaemilano/Construcoes.cpp",
+        "src/bolonhaemilano/Nobreza.cpp",
+        "src/bolonhaemilano/Partida.cpp",
+        "src/bolonhaemilano/Menu.cpp",
+        "-o",
+        "jogo.exe"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Compilar testes - Bolonha e Milano",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-pedantic",
+        "-Isrc/bolonhaemilano",
+        "src/bolonhaemilano/Testes.cpp",
+        "src/bolonhaemilano/Cidade.cpp",
+        "src/bolonhaemilano/Jogador.cpp",
+        "src/bolonhaemilano/Mercado.cpp",
+        "src/bolonhaemilano/Agricultura.cpp",
+        "src/bolonhaemilano/Governo.cpp",
+        "src/bolonhaemilano/Construcoes.cpp",
+        "src/bolonhaemilano/Nobreza.cpp",
+        "src/bolonhaemilano/Partida.cpp",
+        "-o",
+        "testes.exe"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
 }
