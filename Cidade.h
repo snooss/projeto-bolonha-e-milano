@@ -1,3 +1,4 @@
+
 #ifndef CIDADE_H
 #define CIDADE_H
 
@@ -18,6 +19,9 @@ private:
     int taxaImposto;
     std::string nivelJustica;
 
+    int soldados;
+    int construcoes;
+
 public:
     Cidade(const std::string& nome, Jogador* dono);
 
@@ -36,6 +40,9 @@ public:
     std::string getNivelJustica() const;
     void setNivelJustica(const std::string& nivel);
 
+    int getSoldados() const;
+    int getConstrucoes() const;
+
     void avancarAno();
 
     void adicionarFlorins(int quantidade);
@@ -49,6 +56,12 @@ public:
 
     void adicionarServos(int quantidade);
     bool removerServos(int quantidade);
+
+    void adicionarSoldados(int quantidade);
+    bool removerSoldados(int quantidade);
+
+    void adicionarConstrucoes(int quantidade);
+    bool removerConstrucoes(int quantidade);
 
     void exibirStatus() const;
 };

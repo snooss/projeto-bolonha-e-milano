@@ -20,20 +20,25 @@ void Menu::executar() {
     std::cout << "\nJogo encerrado. Ate nunca mais!\n";
 }
 
+
 void Menu::exibirOpcoes() {
     std::cout << "\n==========================================\n";
     std::cout << "             BOLONHA E MILANO\n";
     std::cout << " Um jogo de estrategia economica medieval\n";
     std::cout << "==========================================\n";
+
     std::cout << "1 - Novo jogo\n";
     std::cout << "2 - Ver status da cidade\n";
     std::cout << "3 - Mercado\n";
     std::cout << "4 - Agricultura\n";
     std::cout << "5 - Governo\n";
-    std::cout << "6 - Sobre o jogo\n";
+    std::cout << "6 - Construcoes\n";
+    std::cout << "7 - Sobre o jogo\n";
     std::cout << "0 - Sair\n";
+
     std::cout << "Escolha uma opcao: ";
 }
+
 
 int Menu::lerOpcao() {
     std::string entrada;
@@ -61,6 +66,7 @@ int Menu::lerQuantidade() {
     return lerOpcao();
 }
 
+
 void Menu::processarOpcao(int opcao) {
     switch (opcao) {
         case 1:
@@ -84,6 +90,10 @@ void Menu::processarOpcao(int opcao) {
             break;
 
         case 6:
+            abrirConstrucoes();
+            break;
+
+        case 7:
             exibirSobre();
             break;
 
@@ -96,6 +106,7 @@ void Menu::processarOpcao(int opcao) {
             break;
     }
 }
+
 
 void Menu::iniciarNovoJogo() {
     std::string nomeJogador;
@@ -427,3 +438,93 @@ void Menu::definirJustica() {
         std::cout << "\nNao foi possivel alterar o nivel de justica.\n";
     }
 }
+
+void Menu::abrirConstrucoes() {
+    if (!cidade) {
+        std::cout << "\nInicie um jogo antes de acessar construcoes.\n";
+        return;
+    }
+
+    int opcao;
+
+    do {
+        std::cout << "\n========== CONSTRUCOES ==========\n";
+
+        std::cout << "Florins disponiveis: "
+                  << cidade->getFlorins() << '\n';
+
+        std::cout << "Servos disponiveis: "
+                  << cidade->getServos() << '\n';
+
+        std::cout << "Soldados atuais: "
+                  << cidade->getSoldados() << '\n';
+
+        std::cout << "Construcoes atuais: "
+                  << cidade->getConstrucoes() << '\n';
+
+        std::cout << "\n1 - Recrutar soldados\n";
+        std::cout << "2 - Construir edificios\n";
+        std::cout << "0 - Voltar ao menu principal\n";
+
+        std::cout << "Escolha uma opcao: ";
+
+        opcao = lerOpcao();
+
+        switch (opcao) {
+            case 1:
+                recrutarSoldados();
+                break;
+
+            case 2:
+                construir();
+                break;
+
+            case 0:
+                std::cout << "\nVoltando ao menu principal...\n";
+                break;
+
+            default:
+                std::cout << "\nOpcao invalida!\n";
+                break;
+        }
+
+    } while (opcao != 0);
+}
+
+void Menu::recrutarSoldados() {
+    int quantidade = lerQuantidade();
+
+    if (construcoes.recrutarSoldados(*cidade, quantidade)) {
+        std::cout << "\nRecrutamento realizado com sucesso!\n";
+
+        std::cout << "Soldados atuais: "
+                  << cidade->getSoldados() << '\n';
+
+        std::cout << "Servos restantes: "
+                  << cidade->getServos() << '\n';
+
+        std::cout << "Florins restantes: "
+                  << cidade->getFlorins() << '\n';
+    } else {
+        std::cout << "\nRecrutamento recusado!\n";
+        std::cout << "Verifique a quantidade de florins e servos.\n";
+    }
+}
+
+void Menu::construir() {
+    int quantidade = lerQuantidade();
+
+    if (construcoes.construir(*cidade, quantidade)) {
+        std::cout << "\nConstrucao realizada com sucesso!\n";
+
+        std::cout << "Construcoes atuais: "
+                  << cidade->getConstrucoes() << '\n';
+
+        std::cout << "Florins restantes: "
+                  << cidade->getFlorins() << '\n';
+    } else {
+        std::cout << "\nConstrucao recusada!\n";
+        std::cout << "Verifique a quantidade e o saldo de florins.\n";
+    }
+}
+

@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <limits>
 #include "Cidade.h"
@@ -14,6 +15,9 @@ Cidade::Cidade(const std::string& nome, Jogador* dono) {
 
     this->taxaImposto = 10;
     this->nivelJustica = "Moderada";
+
+    this->soldados = 0;
+    this->construcoes = 0;
 }
 
 std::string Cidade::getNome() const {
@@ -60,20 +64,12 @@ void Cidade::setNivelJustica(const std::string& nivel) {
     nivelJustica = nivel;
 }
 
-void Cidade::adicionarServos(int quantidade) {
-    if (quantidade > 0 &&
-        quantidade <= std::numeric_limits<int>::max() - servos) {
-        servos += quantidade;
-    }
+int Cidade::getSoldados() const {
+    return soldados;
 }
 
-bool Cidade::removerServos(int quantidade) {
-    if (quantidade <= 0 || quantidade > servos) {
-        return false;
-    }
-
-    servos -= quantidade;
-    return true;
+int Cidade::getConstrucoes() const {
+    return construcoes;
 }
 
 void Cidade::avancarAno() {
@@ -130,6 +126,54 @@ bool Cidade::removerGraos(int quantidade) {
     return true;
 }
 
+void Cidade::adicionarServos(int quantidade) {
+    if (quantidade > 0 &&
+        quantidade <= std::numeric_limits<int>::max() - servos) {
+        servos += quantidade;
+    }
+}
+
+bool Cidade::removerServos(int quantidade) {
+    if (quantidade <= 0 || quantidade > servos) {
+        return false;
+    }
+
+    servos -= quantidade;
+    return true;
+}
+
+void Cidade::adicionarSoldados(int quantidade) {
+    if (quantidade > 0 &&
+        quantidade <= std::numeric_limits<int>::max() - soldados) {
+        soldados += quantidade;
+    }
+}
+
+bool Cidade::removerSoldados(int quantidade) {
+    if (quantidade <= 0 || quantidade > soldados) {
+        return false;
+    }
+
+    soldados -= quantidade;
+    return true;
+}
+
+void Cidade::adicionarConstrucoes(int quantidade) {
+    if (quantidade > 0 &&
+        quantidade <= std::numeric_limits<int>::max() - construcoes) {
+        construcoes += quantidade;
+    }
+}
+
+bool Cidade::removerConstrucoes(int quantidade) {
+    if (quantidade <= 0 || quantidade > construcoes) {
+        return false;
+    }
+
+    construcoes -= quantidade;
+    return true;
+}
+
 void Cidade::exibirStatus() const {
     std::cout << "\n========== STATUS DA CIDADE ==========\n";
     std::cout << "Cidade: " << nome << '\n';
@@ -142,11 +186,11 @@ void Cidade::exibirStatus() const {
     std::cout << "Graos: " << graos << " unidades\n";
     std::cout << "Servos: " << servos << '\n';
 
-    std::cout << "Taxa de imposto: "
-              << taxaImposto << "%\n";
+    std::cout << "Taxa de imposto: " << taxaImposto << "%\n";
+    std::cout << "Nivel de justica: " << nivelJustica << '\n';
 
-    std::cout << "Nivel de justica: "
-              << nivelJustica << '\n';
+    std::cout << "Soldados: " << soldados << '\n';
+    std::cout << "Construcoes: " << construcoes << '\n';
 
     std::cout << "======================================\n";
 }

@@ -1,3 +1,4 @@
+
 #ifndef MENU_H
 #define MENU_H
 
@@ -8,6 +9,7 @@
 #include "Mercado.h"
 #include "Agricultura.h"
 #include "Governo.h"
+#include "Construcoes.h"
 
 class Menu {
 private:
@@ -19,6 +21,7 @@ private:
     Mercado mercado;
     Agricultura agricultura;
     Governo governo;
+    Construcoes construcoes;
 
     void iniciarNovoJogo();
     void exibirOpcoes();
@@ -42,6 +45,10 @@ private:
     void arrecadarImpostos();
     void definirTaxaImposto();
     void definirJustica();
+
+    void abrirConstrucoes();
+    void recrutarSoldados();
+    void construir();
 
 public:
     Menu();
